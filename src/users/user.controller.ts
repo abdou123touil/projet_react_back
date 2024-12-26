@@ -1,9 +1,22 @@
-import { Controller, Post, Body, Param, Put, Delete, UsePipes, ValidationPipe, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  UsePipes,
+  ValidationPipe,
+  UseInterceptors,
+  UploadedFile,
+  Get
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Multer } from 'multer'; // Import Multer directly from multer package
+import { Multer } from 'multer';
+import {UpdateUserDto} from "./dto/UpdateUser.dto"; // Import Multer directly from multer package
 
 @Controller('auth')
 export class UserController {
@@ -27,15 +40,18 @@ export class UserController {
   async login(@Body() loginDto: LoginDto) {
     return this.userService.login(loginDto);
   }
-
+  @Get(':id')
+  async getUserById(@Param('id') id: string) {
+    return this.userService.getUserById(id);
+  }
   // Update user by ID
   @Put(':id')
   @UsePipes(new ValidationPipe({ whitelist: true }))
   async updateUser(
       @Param('id') id: string,
-      @Body() createUserDto: CreateUserDto
+      @Body() updateUserDto: UpdateUserDto
   ) {
-    return this.userService.updateUser(id, createUserDto);
+    return this.userService.updateUser(id, updateUserDto);
   }
 
   // Delete user by ID

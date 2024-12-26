@@ -20,12 +20,14 @@ export class PostService {
     postId: string,
     content: string,
     authorId: string,
+    authorName:string,
   ): Promise<Comment> {
     // Create a new comment
     const newComment = new this.commentModel({
       content,
       authorId,
       postId,
+      authorName,
     });
 
     // Save the new comment
@@ -45,8 +47,8 @@ export class PostService {
           comments: {
             _id: newComment._id,
             content: newComment.content,
-            authorId: populatedComment.authorId, // Push the populated authorId with details
-          },
+            authorId: populatedComment.authorId,
+                     },
         },
       },
       { new: true },

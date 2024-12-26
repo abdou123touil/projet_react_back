@@ -20,8 +20,9 @@ export class PostController {
     @Param('postId') postId: string,
     @Body('content') content: string,
     @Body('authorId') authorId: string,
+    @Body('authorName') authorName: string,
   ): Promise<Comment> {
-    return this.postService.addCommentToPost(postId, content, authorId);
+    return this.postService.addCommentToPost(postId, content, authorId,authorName);
   }
 
   // Route to get all posts

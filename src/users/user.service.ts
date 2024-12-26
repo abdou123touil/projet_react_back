@@ -11,6 +11,7 @@ import { User } from './user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import {UpdateUserDto} from "./dto/UpdateUser.dto";
 
 @Injectable()
 export class UserService {
@@ -53,23 +54,10 @@ export class UserService {
   }
 
   // Update user by ID
-  async updateUser(id: string, updateUserDto: CreateUserDto): Promise<User> {
-    const existingUser = await this.userModel.findById(id);
-    if (!existingUser) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-
-    if (updateUserDto.password) {
-      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
-    }
-
-    const updatedUser = await this.userModel.findByIdAndUpdate(
-        id,
-        { $set: updateUserDto },
-        { new: true },
-    );
-
-    return updatedUser;
+  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<any> {
+    // Implementation for updating user
+    const updateData = { ...updateUserDto };
+    return await this.userModel.findByIdAndUpdate(id, updateData, { new: true });
   }
 
   // Delete user by ID
@@ -81,5 +69,13 @@ export class UserService {
 
     await this.userModel.findByIdAndDelete(id);
     return { message: `User with ID ${id} deleted successfully` };
+  }
+  async getUserById(id: string) {
+    // Assuming you're using a database like MongoDB
+    const user = await this.userModel.findById(id).exec(); // Replace with actual DB logic
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
   }
 }
